@@ -17,4 +17,40 @@ public class MoneyTransferPage {
     public MoneyTransferPage() {
         amountField.shouldBe(visible);
     }
+
+    public  DashboardPage cancelTransfer (String amount, String cardNumber) {
+        amountField.setValue(amount);
+        fromField.setValue(cardNumber);
+        cancelButton.click();
+        return new DashboardPage();
+    }
+
+    private void Transfer(String amount, String cardNumber) {
+        amountField.setValue(amount);
+        fromField.setValue(cardNumber);
+        transferButton.click();
+    }
+
+    public DashboardPage validTransfer(String amount, String cardNumber) {
+        Transfer(amount, cardNumber);
+        return new DashboardPage();
+    }
+
+    public MoneyTransferPage transferIncorrectCard(String amount, String cardNumber) {
+        Transfer(amount, cardNumber);
+        errorMessage.shouldBe(visible).shouldHave(Condition.text("Ошибка! Произошла ошибка"));
+        return this;
+    }
+
+    public MoneyTransferPage transferUnfilledCardNumber(String amount) {
+        Transfer(amount, "");
+        errorMessage.shouldBe(visible).shouldHave(Condition.text("Ошибка! Произошла ошибка"));
+        return this;
+    }
+
+    public MoneyTransferPage transferUnfilledAmount(String cardNumber) {
+        Transfer("", cardNumber);
+        errorMessage.shouldBe(visible).shouldHave(Condition.text("Ошибка! Произошла ошибка"));
+        return this;
+    }
 }

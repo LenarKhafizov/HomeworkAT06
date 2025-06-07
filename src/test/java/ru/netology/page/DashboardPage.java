@@ -18,8 +18,8 @@ public class DashboardPage {
         heading.shouldBe(visible);
     }
 
-    public int getCardBalance() {
-        var text = cards.first().text();
+    public int getCardBalance(DataHelper.CardInfo cardInfo) {
+        var text = getCardElement(cardInfo).getText();
         return extractBalance(text);
     }
 
