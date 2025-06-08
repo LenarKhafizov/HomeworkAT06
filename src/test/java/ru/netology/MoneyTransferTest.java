@@ -82,4 +82,37 @@ public class MoneyTransferTest {
         var transferPage = dashboardPage.selectCard(firstCard);
         transferPage.cancelTransfer("1000", firstCard.getCardNumber());
     }
+
+    @Test
+    @DisplayName("5. Transfer with incorrect card number (ERROR!!!)")
+    void shouldWithIncorrectCardNumber() {
+        var firstCard = DataHelper.getNonExistCard();
+        var secondCard = DataHelper.getSecondCard();
+        var transferPage = dashboardPage.selectCard(secondCard);
+        transferPage.transferIncorrectCard("1000", firstCard.getCardNumber());
+    }
+
+    @Test
+    @DisplayName("6. Transfer with unfilled amount")
+    void shouldWithUnfilledAmount() {
+        var firstCard = DataHelper.getFirstCard();
+        var secondCard = DataHelper.getSecondCard();
+        var transferPage = dashboardPage.selectCard(secondCard);
+        transferPage.transferUnfilledAmount(firstCard.getCardNumber());
+    }
+
+    @Test
+    @DisplayName("7. Transfer money above initial balance")
+    void shouldTransferAboveInitialBalance() {
+        var firstCard = DataHelper.getFirstCard();
+        var secondCard = DataHelper.getSecondCard();
+        var amount = "55555";
+        var expectedSecondCardBalance = dashboardPage.getCardBalance(secondCard);
+
+        var transferPage = dashboardPage.selectCard(firstCard);
+        dashboardPage = transferPage.validTransfer(amount, secondCard.getCardNumber());
+        var actualSecondCardBalance = dashboardPage.getCardBalance(secondCard);
+
+        assertEquals(expectedSecondCardBalance, actualSecondCardBalance);
+    }
 }
