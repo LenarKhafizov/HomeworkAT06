@@ -84,7 +84,7 @@ public class MoneyTransferTest {
     }
 
     @Test
-    @DisplayName("5. Transfer with incorrect card number (ERROR!!!)")
+    @DisplayName("5. Transfer with incorrect card number")
     void shouldWithIncorrectCardNumber() {
         var firstCard = DataHelper.getNonExistCard();
         var secondCard = DataHelper.getSecondCard();

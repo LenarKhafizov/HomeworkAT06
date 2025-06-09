@@ -19,38 +19,43 @@ public class MoneyTransferPage {
     }
 
     public  DashboardPage cancelTransfer (String amount, String cardNumber) {
-        amountField.setValue(amount);
-        fromField.setValue(cardNumber);
+        transferPrepare(amount, cardNumber);
         cancelButton.click();
         return new DashboardPage();
     }
 
-    private void Transfer(String amount, String cardNumber) {
-        amountField.setValue(amount);
-        fromField.setValue(cardNumber);
+    private void transfer(String amount, String cardNumber) {
+        transferPrepare(amount, cardNumber);
         transferButton.click();
     }
 
+    private void transferPrepare(String amount, String cardNumber) {
+        amountField.setValue(amount);
+        fromField.setValue(cardNumber);
+    }
+
     public DashboardPage validTransfer(String amount, String cardNumber) {
-        Transfer(amount, cardNumber);
+        transfer(amount, cardNumber);
         return new DashboardPage();
     }
 
     public MoneyTransferPage transferIncorrectCard(String amount, String cardNumber) {
-        Transfer(amount, cardNumber);
-        errorMessage.shouldBe(visible).shouldHave(Condition.text("Ошибка! Произошла ошибка"));
+        transferError(amount, cardNumber);
         return this;
     }
 
     public MoneyTransferPage transferUnfilledCardNumber(String amount) {
-        Transfer(amount, "");
-        errorMessage.shouldBe(visible).shouldHave(Condition.text("Ошибка! Произошла ошибка"));
+        transferError(amount, "");
         return this;
     }
 
+    private void transferError(String amount, String cardNumber) {
+        transfer(amount, cardNumber);
+        errorMessage.shouldBe(visible).shouldHave(Condition.text("Ошибка! Произошла ошибка"));
+    }
+
     public MoneyTransferPage transferUnfilledAmount(String cardNumber) {
-        Transfer("", cardNumber);
-        //errorMessage.shouldBe(visible).shouldHave(Condition.text("Ошибка! Произошла ошибка"));
+        transfer("", cardNumber);
         return this;
     }
 }
