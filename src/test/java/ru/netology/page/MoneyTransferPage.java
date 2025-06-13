@@ -24,7 +24,8 @@ public class MoneyTransferPage {
         return new DashboardPage();
     }
 
-    private void transfer(String amount, String cardNumber) {
+    //private
+    public void transfer(String amount, String cardNumber) {
         transferPrepare(amount, cardNumber);
         transferButton.click();
     }
@@ -39,23 +40,8 @@ public class MoneyTransferPage {
         return new DashboardPage();
     }
 
-    public MoneyTransferPage transferIncorrectCard(String amount, String cardNumber) {
-        transferError(amount, cardNumber);
-        return this;
-    }
-
-    public MoneyTransferPage transferUnfilledCardNumber(String amount) {
-        transferError(amount, "");
-        return this;
-    }
-
-    private void transferError(String amount, String cardNumber) {
-        transfer(amount, cardNumber);
+    public void checkErrorMessage() {
+        //transfer(amount, cardNumber);
         errorMessage.shouldBe(visible).shouldHave(Condition.text("Ошибка! Произошла ошибка"));
-    }
-
-    public MoneyTransferPage transferUnfilledAmount(String cardNumber) {
-        transfer("", cardNumber);
-        return this;
     }
 }

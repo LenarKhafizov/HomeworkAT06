@@ -14,7 +14,7 @@ public class LoginPage {
     private SelenideElement unfilledLogin = $("[data-test-id='login'].input_invalid .input__sub");
     private SelenideElement unfilledPassword = $("[data-test-id='password'].input_invalid .input__sub");
 
-    private void login (String login, String password){
+    public void login(String login, String password){
         loginField.setValue(login);
         passwordField.setValue(password);
         buttonField.click();
@@ -25,24 +25,21 @@ public class LoginPage {
         return new VerificationPage();
     }
 
-    public LoginPage invalidLogin(String login, String password) {
-        login(login, password);
-        errorMesssage.shouldBe(Condition.visible)
-                .shouldHave(Condition.text("Ошибка! Неверно указан логин или пароль"));
+    public LoginPage checkErrorMessage(SelenideElement errorField, String errorText) {
+        errorField.shouldBe(Condition.visible)
+                .shouldHave(Condition.text(errorText));
         return this;
     }
 
-    public LoginPage unfilledLogin(String password) {
-        login("", password);
-        unfilledLogin.shouldBe(Condition.visible)
-                .shouldHave(Condition.text("Поле обязательно для заполнения"));
-        return this;
+    public SelenideElement getErrorMessage() {
+        return errorMesssage;
     }
 
-    public LoginPage unfilledPassword(String login) {
-        login(login, "");
-        unfilledPassword.shouldBe(Condition.visible)
-                .shouldHave(Condition.text("Поле обязательно для заполнения"));
-        return this;
+    public SelenideElement getUnfilledLogin() {
+        return unfilledLogin;
+    }
+
+    public SelenideElement getUnfilledPassword() {
+        return unfilledPassword;
     }
 }

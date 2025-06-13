@@ -18,28 +18,32 @@ public class VerificationPage {
         codeField.shouldBe(visible);
     }
 
-    private void Verify(String code) {
+    public void verify(String code) {
+        verifySetValue(code, continueButton);
+    }
+
+    private void verifySetValue(String code, SelenideElement button) {
         codeField.setValue(code);
-        continueButton.click();
+        button.click();
     }
 
     public DashboardPage validVerify(DataHelper.VerificationCode verificationCode) {
-        codeField.setValue(verificationCode.getCode());
-        verifyButton.click();
+        verifySetValue(verificationCode.getCode(), verifyButton);
         return new DashboardPage();
     }
 
-    public VerificationPage incorrectVerify(DataHelper.VerificationCode code) {
-        Verify(code.getCode());
-        errorNotification.shouldBe(Condition.visible)
-                .shouldHave(Condition.text("Ошибка! Неверно указан код! Попробуйте ещё раз"));
+    public VerificationPage checkErrorMessage(SelenideElement errorField, String errorText) {
+        errorField.shouldBe(Condition.visible)
+                .shouldHave(Condition.text(errorText));
         return this;
     }
 
-    public VerificationPage unfilledVerificationCode() {
-        Verify("");
-        codeFieldError.shouldBe(Condition.visible)
-                .shouldHave(Condition.text("Поле обязательно для заполнения"));
-        return this;
+
+    public SelenideElement getErrorNotification() {
+        return errorNotification;
+    }
+
+    public SelenideElement getCodeFieldError() {
+        return codeFieldError;
     }
 }

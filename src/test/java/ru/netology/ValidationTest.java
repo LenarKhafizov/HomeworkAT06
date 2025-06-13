@@ -15,41 +15,49 @@ public class ValidationTest {
     }
 
     @Test
-    @DisplayName("Should with invalid login or password")
+    @DisplayName("1. Should with invalid login or password")
     void shouldWithInvalidLoginOrPassword() {
         var loginPage = new LoginPage();
-        loginPage.invalidLogin(DataHelper.getRandomLogin(), DataHelper.getRandomPassword());
+        loginPage.login(DataHelper.getRandomLogin(), DataHelper.getRandomPassword());
+        loginPage.checkErrorMessage(loginPage.getErrorMessage(), "Ошибка! Неверно указан логин или пароль");
     }
 
     @Test
-    @DisplayName("Should with unfilled login")
+    @DisplayName("2. Should with unfilled login")
     void shouldWithUnfilledLogin() {
         var loginPage = new LoginPage();
-        loginPage.unfilledLogin(getAuthInfo().getPassword());
+        loginPage.login("", getAuthInfo().getPassword());
+        loginPage.checkErrorMessage(loginPage.getUnfilledLogin(), "Поле обязательно для заполнения");
     }
 
     @Test
-    @DisplayName("Should with unfilled password")
+    @DisplayName("3. Should with unfilled password")
     void shouldWithUnfilledPassword() {
         var loginPage = new LoginPage();
-        loginPage.unfilledPassword(getAuthInfo().getLogin());
+        loginPage.login(getAuthInfo().getLogin(), "");
+        loginPage.checkErrorMessage(loginPage.getUnfilledPassword(), "Поле обязательно для заполнения");
     }
 
     @Test
-    @DisplayName("Should with incorrect verification code")
+    @DisplayName("4. Should with incorrect verification code")
     void shouldWithIncorrectVerificationCode() {
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
         var verificationPage = loginPage.validLogin(authInfo.getLogin(), authInfo.getPassword());
-        verificationPage.incorrectVerify(DataHelper.getVerificationCodeRandom());
+
+        verificationPage.verify(DataHelper.getVerificationCodeRandom().toString());
+        verificationPage.checkErrorMessage(verificationPage
+                .getErrorNotification(), "Ошибка! Неверно указан код! Попробуйте ещё раз");
     }
 
     @Test
-    @DisplayName("Should with unfilled verification code")
+    @DisplayName("5. Should with unfilled verification code")
     void shouldWithUnfilledVerificationCode() {
         var authInfo = DataHelper.getAuthInfo();
         var loginPage = new LoginPage();
         var verificationPage = loginPage.validLogin(authInfo.getLogin(), authInfo.getPassword());
-        verificationPage.unfilledVerificationCode();
+        verificationPage.verify("");
+        verificationPage.checkErrorMessage(verificationPage
+                .getCodeFieldError() ,"Поле обязательно для заполнения");
     }
 }

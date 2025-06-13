@@ -1,6 +1,5 @@
 package ru.netology;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -72,7 +71,8 @@ public class MoneyTransferTest {
     void shouldWithUnfilledCard() {
         var firstCard = DataHelper.getFirstCard();
         var transferPage = dashboardPage.selectCard(firstCard);
-        transferPage.transferUnfilledCardNumber("1000");
+        transferPage.transfer("1000", "");
+        transferPage.checkErrorMessage();
     }
 
     @Test
@@ -89,7 +89,8 @@ public class MoneyTransferTest {
         var firstCard = DataHelper.getNonExistCard();
         var secondCard = DataHelper.getSecondCard();
         var transferPage = dashboardPage.selectCard(secondCard);
-        transferPage.transferIncorrectCard("1000", firstCard.getCardNumber());
+        transferPage.transfer("1000", firstCard.getCardNumber());
+        transferPage.checkErrorMessage();
     }
 
     @Test
@@ -98,7 +99,7 @@ public class MoneyTransferTest {
         var firstCard = DataHelper.getFirstCard();
         var secondCard = DataHelper.getSecondCard();
         var transferPage = dashboardPage.selectCard(secondCard);
-        transferPage.transferUnfilledAmount(firstCard.getCardNumber());
+        transferPage.transfer("", firstCard.getCardNumber());
     }
 
     @Test
